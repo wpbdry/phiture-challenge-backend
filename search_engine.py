@@ -1,2 +1,2 @@
 def test():
-    return "Hello from python"
+    return {'hello': 'world'}

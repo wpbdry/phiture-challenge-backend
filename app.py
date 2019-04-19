@@ -1,21 +1,24 @@
 from flask import Flask
+import flask_restful
 from flask_cors import CORS
 
-import config
-import search_engine
+import config, search_engine
 
 app = Flask(__name__)
 CORS(app)
-app.debug = True
+api = flask_restful.Api(app)
 
-app.add_url_rule(
-    '/search',
-    'search_engine',
-    search_engine.test()
-)
+
+class Search(flask_restful.Resource):
+    def get(self):
+        return search_engine.test()
+
+
+api.add_resource(Search, '/search')
 
 if __name__ == '__main__':
     app.run(
         host=config.flask_host,
-        port=config.flask_port
+        port=config.flask_port,
+        debug=True
     )
