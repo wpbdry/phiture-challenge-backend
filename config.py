@@ -1,2 +1,12 @@
+import secret
+
+# Flask
 flask_host = "0.0.0.0"
 flask_port = 5000
+
+# Database
+db_host = "balarama.db.elephantsql.com"
+db_port = "5432"
+db_name = "stcyqqal"
+db_user = "stcyqqal"
+db_password = secret.elephantsql_dbpassword

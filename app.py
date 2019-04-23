@@ -18,7 +18,10 @@ class Search(flask_restful.Resource):
 
     def post(self):
         args = parser.parse_args()
-        return search_engine.return_results(args.searchterm)
+        try:
+            return search_engine.return_results(args.searchterm)
+        except AssertionError as e:
+            return str(e)
 
 
 api.add_resource(Search, '/search')
