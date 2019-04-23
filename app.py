@@ -8,7 +8,6 @@ import config, search_engine
 app = Flask(__name__)
 CORS(app)
 api = flask_restful.Api(app)
-
 parser = flask_restful_reqparse.RequestParser()
 parser.add_argument('searchterm')
 
