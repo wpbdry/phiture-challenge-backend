@@ -1,6 +1,6 @@
 from flask import Flask
 import flask_restful
-from flask_restful import reqparse
+from flask_restful import reqparse as flask_restful_reqparse
 from flask_cors import CORS
 
 import config, search_engine
@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 api = flask_restful.Api(app)
 
-parser = reqparse.RequestParser()
+parser = flask_restful_reqparse.RequestParser()
 parser.add_argument('searchterm')
 
 
