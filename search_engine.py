@@ -13,7 +13,7 @@ def create_regex(search_term):
     return regex
 
 
-def search_by_name(search_term):
+def search(search_term):
     assert (search_term != ''), 'Search string should not be empty'
     regex = create_regex(search_term)
     query = '''
@@ -28,8 +28,18 @@ def search_by_name(search_term):
 
 
 def return_results(search_term):
+    function_return = {
+        'search': search_term,
+        'results': [],
+        'exitcode': 0
+    }
     try:
-        matches = search_by_name(search_term)
-        return matches
-    except AssertionError:
-        raise
+        function_return['results'] = search(search_term)
+    except AssertionError as e:
+        print(str(e))
+        function_return['exitcode'] = 1
+    except Exception as e:
+        print(str(e))
+        function_return['exitcode'] = 2
+    return function_return
+
