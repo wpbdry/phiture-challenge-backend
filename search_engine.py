@@ -21,7 +21,8 @@ def search(search_term):
         FROM phiture_challenge.players
         WHERE name ~* '{0}'
         OR nationality ~* '{0}'
-        OR club ~* '{0}';
+        OR club ~* '{0}'
+        ORDER BY overall DESC;
     '''.format(regex)
     matches = db.execute_sql(query)
     return matches
