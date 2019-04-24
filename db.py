@@ -5,14 +5,18 @@ import config
 
 
 def execute_sql(query):
-    conn = psycopg2.connect(
-        host=config.db_host,
-        port=config.db_port,
-        dbname=config.db_name,
-        user=config.db_user,
-        password=config.db_password)
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    cur.execute(query)
+    try:
+        conn = psycopg2.connect(
+            host=config.db_host,
+            port=config.db_port,
+            dbname=config.db_name,
+            user=config.db_user,
+            password=config.db_password
+        )
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute(query)
+    except Exception:
+        raise
     # The following is copied from
     # https://stackoverflow.com/questions/16519385/output-pyodbc-cursor-results-as-python-dictionary
     columns = [column[0] for column in cur.description]

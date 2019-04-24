@@ -64,23 +64,35 @@ def search(search_term):
         exact_matches_query_string = '{} ORDER BY overall DESC;'.format(
             generate_query_string_match_both_whole_words(search_term)
         )
-        exact_matches = db.execute_sql(exact_matches_query_string)
+        try:
+            exact_matches = db.execute_sql(exact_matches_query_string)
+        except Exception:
+            raise
         close_matches_query_string = '{} EXCEPT {} ORDER BY overall DESC;'.format(
             generate_query_string_match_any_whole_word(search_term),
             generate_query_string_match_both_whole_words(search_term)
         )
-        close_matches = db.execute_sql(close_matches_query_string)
+        try:
+            close_matches = db.execute_sql(close_matches_query_string)
+        except Exception:
+            raise
     else:
         exact_matches_query_string = '{} ORDER BY overall DESC;'.format(
             generate_query_string_match_any_whole_word(search_term)
         )
-        exact_matches = db.execute_sql(exact_matches_query_string)
+        try:
+            exact_matches = db.execute_sql(exact_matches_query_string)
+        except Exception:
+            raise
         if words_count == 1:
             close_matches_query_string = '{} EXCEPT {} ORDER BY overall DESC;'.format(
                 generate_query_string_match_any_part_word(search_term),
                 generate_query_string_match_any_whole_word(search_term)
             )
-            close_matches = db.execute_sql(close_matches_query_string)
+            try:
+                close_matches = db.execute_sql(close_matches_query_string)
+            except Exception:
+                raise
         else:
             close_matches = []
 
@@ -105,7 +117,10 @@ def return_results(search_term):
         print(str(e))
         function_return['exitcode'] = 1
     except Exception as e:
-        print(str(e))
-        function_return['exitcode'] = 2
+        if str(e)[0:29] == 'could not translate host name':
+            function_return['exitcode'] = 2
+        else:
+            print(str(e))
+            function_return['exitcode'] = 3
     return function_return
 
