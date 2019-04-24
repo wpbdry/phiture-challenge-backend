@@ -1,4 +1,4 @@
-import db
+import db, config
 
 
 def create_regex(search_term):
@@ -13,29 +13,94 @@ def create_regex(search_term):
     return regex
 
 
+def generate_query_string_match_any_whole_word(search_term):
+    regex = create_regex(search_term)
+    match_any_whole_word_query = '''
+        SELECT {0}
+        FROM {1}
+        WHERE name ~* '{2}'
+        OR nationality ~* '{2}'
+        OR club ~* '{2}'
+    '''.format(config.db_requested_columns, config.db_table_name, regex)
+    return match_any_whole_word_query
+
+
+def generate_query_string_match_any_part_word(search_term):
+    match_any_part_word_query = '''
+        SELECT {0}
+        FROM {1}
+        WHERE UPPER(name) LIKE UPPER('%{2}%')
+        OR UPPER(nationality) LIKE UPPER('%{2}%')
+        OR UPPER(club) LIKE UPPER('%{2}%')
+    '''.format(config.db_requested_columns, config.db_table_name, search_term)
+    return match_any_part_word_query
+
+
+def generate_query_string_match_both_whole_words(search_term):
+    if len(search_term.split(' ')) != 2:
+        return False
+    regex = create_regex(search_term)
+    match_both_whole_words_query = '''
+        SELECT {0}
+        FROM {1}
+        WHERE (
+            name ~* '{2}'
+            AND nationality ~* '{2}'
+        ) OR (
+            nationality ~* '{2}'
+            AND club ~* '{2}'
+        ) OR (
+            club ~* '{2}'
+            AND name ~* '{2}'
+        )
+    '''.format(config.db_requested_columns, config.db_table_name, regex)
+    return match_both_whole_words_query
+
+
 def search(search_term):
     assert (search_term != ''), 'Search string should not be empty'
-    regex = create_regex(search_term)
-    query = '''
-        SELECT name, age, nationality, club, photo, overall, value
-        FROM phiture_challenge.players
-        WHERE name ~* '{0}'
-        OR nationality ~* '{0}'
-        OR club ~* '{0}'
-        ORDER BY overall DESC;
-    '''.format(regex)
-    matches = db.execute_sql(query)
-    return matches
+    words_count = len(search_term.split(' '))
+    if words_count == 2:
+        exact_matches_query_string = '{} ORDER BY overall DESC;'.format(
+            generate_query_string_match_both_whole_words(search_term)
+        )
+        exact_matches = db.execute_sql(exact_matches_query_string)
+        close_matches_query_string = '{} EXCEPT {} ORDER BY overall DESC;'.format(
+            generate_query_string_match_any_whole_word(search_term),
+            generate_query_string_match_both_whole_words(search_term)
+        )
+        close_matches = db.execute_sql(close_matches_query_string)
+    else:
+        exact_matches_query_string = '{} ORDER BY overall DESC;'.format(
+            generate_query_string_match_any_whole_word(search_term)
+        )
+        exact_matches = db.execute_sql(exact_matches_query_string)
+        if words_count == 1:
+            close_matches_query_string = '{} EXCEPT {} ORDER BY overall DESC;'.format(
+                generate_query_string_match_any_part_word(search_term),
+                generate_query_string_match_any_whole_word(search_term)
+            )
+            close_matches = db.execute_sql(close_matches_query_string)
+        else:
+            close_matches = []
+
+    return {
+        'results': exact_matches,
+        'moreresults': close_matches
+    }
 
 
 def return_results(search_term):
     function_return = {
         'search': search_term,
         'results': [],
+        'moreresults': [],
         'exitcode': 0
     }
     try:
-        function_return['results'] = search(search_term)
+        search_results = search(search_term)
+        function_return['results'] = search_results['results']
+        function_return['moreresults'] = search_results['moreresults']
     except AssertionError as e:
         print(str(e))
         function_return['exitcode'] = 1

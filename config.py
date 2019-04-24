@@ -10,3 +10,5 @@ db_port = "5432"
 db_name = "stcyqqal"
 db_user = "stcyqqal"
 db_password = secret.elephantsql_dbpassword
+db_table_name = "phiture_challenge.players"
+db_requested_columns = "name, age, nationality, club, photo, overall, value"
