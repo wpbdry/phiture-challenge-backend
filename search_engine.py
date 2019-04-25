@@ -117,7 +117,7 @@ def return_results(search_term):
         print(str(e))
         function_return['exitcode'] = 1
     except Exception as e:
-        if str(e)[0:29] == 'could not translate host name':
+        if str(e)[0:29] == 'could not translate host name' or str(e)[0:6] == 'FATAL:':
             function_return['exitcode'] = 2
         else:
             print(str(e))

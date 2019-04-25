@@ -1,1 +1,1 @@
-elephantsql_dbpassword = "Cd15OejJkCTZzip7frFIS8foI_-orj7H"
+elephantsql_dbpassword = "vQCxfMJn6s3hzWKv7f7SkXmTk0GNXB6q"
