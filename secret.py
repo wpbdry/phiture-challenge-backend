@@ -1,1 +1,0 @@
-elephantsql_dbpassword = "vQCxfMJn6s3hzWKv7f7SkXmTk0GNXB6q"
