@@ -3,13 +3,14 @@ import flask_restful
 from flask_restful import reqparse as flask_restful_reqparse
 from flask_cors import CORS
 
-import config, search_engine
+import config, search_engine, team_builder
 
 app = Flask(__name__)
 CORS(app)
 api = flask_restful.Api(app)
-parser = flask_restful_reqparse.RequestParser()
-parser.add_argument('searchterm')
+
+search_parser = flask_restful_reqparse.RequestParser()
+search_parser.add_argument('searchterm')
 
 
 class Search(flask_restful.Resource):
@@ -17,14 +18,31 @@ class Search(flask_restful.Resource):
         return "Error: please only send POST requests"
 
     def post(self):
-        args = parser.parse_args()
+        args = search_parser.parse_args()
         try:
             return search_engine.return_results(args.searchterm)
         except AssertionError as e:
             return str(e)
 
 
+team_parser = flask_restful_reqparse.RequestParser()
+team_parser.add_argument('budget')
+
+
+class TeamBuilder(flask_restful.Resource):
+    def get(self):
+        return "Error: please only send POST requests"
+
+    def post(self):
+        args = team_parser.parse_args()
+        try:
+            return team_builder.calculate_team(args.budget)
+        except Exception as e:
+            print(str(e))
+
+
 api.add_resource(Search, '/search')
+api.add_resource(TeamBuilder, '/team-builder')
 
 if __name__ == '__main__':
     app.run(
