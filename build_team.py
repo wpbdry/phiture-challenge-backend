@@ -58,8 +58,31 @@ def build_team(budget):
     return team
 
 
+def add_team_info_to_team(team):
+    team_with_info = {}
+    for position in config.positions:
+        position_players = team[position]
+        team_with_info[position] = []
+        for i in range(0, len(position_players)):
+            if position_players[i]['player_id'] != -1:  # REMOVE: Only here cause team building isn't working properly
+                query = """
+                    SELECT {0}
+                    FROM {1}
+                    WHERE row_number = {2}
+                """.format(config.db_requested_columns_for_team, config.db_table_name, position_players[i]['player_id'])
+                new_info = db.execute_sql(query)
+                team_with_info[position].append(new_info[0])
+                team_with_info[position][i]['player_id'] = position_players[i]['player_id']
+                team_with_info[position][i]['position_score'] = position_players[i]['position_score']
+                team_with_info[position][i]['numeric_value'] = position_players[i]['numeric_value']
+                # Intentionally throw away value_for_money at this point
+    return team_with_info
 
 
+def provide_team(budget):
+    team = build_team(budget)
+    team = add_team_info_to_team(team)
+    return team
 
 
-print(build_team(2000000000000000))
+print(provide_team(20000000000))
