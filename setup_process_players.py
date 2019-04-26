@@ -20,6 +20,7 @@ def calculate_value_for_money_per_position(players):
         pos = player['position']
         if not pos:
             position_score = player['overall']  # Good enough for now
+            print(position_score)
         elif pos == 'LS' or pos == 'RS' or pos == 'ST':  # These positions exist in the dataset but not in teams
             position_score = None
         elif pos == 'GK':  # GK has multiple score columns in dataset
@@ -96,4 +97,4 @@ def add_players_to_my_data_db(players):  # In which position_score and numeric_v
 def process_players():
     raw_players = get_all_players_from_db()
     processed_players = calculate_value_for_money_per_position(raw_players)
-    add_players_to_my_data_db(processed_players)
+    #add_players_to_my_data_db(processed_players)
