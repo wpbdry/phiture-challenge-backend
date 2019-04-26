@@ -35,6 +35,7 @@ def calculate_value_for_money_per_position(players):
                 if position_score[i] == '+':
                     position_score = position_score[0:i]
                     position_score = int(position_score, 10)
+        player['position_score'] = position_score
 
         # Get value as a sensible number
         val = player['value']
@@ -54,15 +55,9 @@ def calculate_value_for_money_per_position(players):
                     numeric_value = None
             except Exception:
                 numeric_value = None
-
-        # Calculate value for money and add to object
-        if position_score and numeric_value:
-            value_for_money = position_score / numeric_value
-        else:
-            value_for_money = None
-        player['value_for_money'] = value_for_money
+        player['numeric_value'] = numeric_value
     return players
 
 
-players = get_all_players_from_db()
-print(calculate_value_for_money_per_position(players))
+def add_players_to_new_db():  # In which position_score and numeric_value are included as an attributes
+    pass
