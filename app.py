@@ -3,7 +3,7 @@ import flask_restful
 from flask_restful import reqparse as flask_restful_reqparse
 from flask_cors import CORS
 
-import config, search_engine, team_builder
+import config, search_engine, build_team
 
 app = Flask(__name__)
 CORS(app)
@@ -36,7 +36,7 @@ class TeamBuilder(flask_restful.Resource):
     def post(self):
         args = team_parser.parse_args()
         try:
-            return team_builder.calculate_team(args.budget)
+            return build_team.provide_team(int(args.budget))
         except Exception as e:
             print(str(e))
 

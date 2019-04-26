@@ -51,63 +51,63 @@ empty_team = {
     'goalkeeper': [
         {
             'player_id': -1,
-            'position_score': 1,
+            'position_score': 0,
             'numeric_value': 1
         }
     ],
     'fullback': [
         {
             'player_id': -1,
-            'position_score': 1,
+            'position_score': 0,
             'numeric_value': 1
         },
         {
             'player_id': -1,
-            'position_score': 1,
+            'position_score': 0,
             'numeric_value': 1
         }
     ],
     'halfback': [
         {
             'player_id': -1,
-            'position_score': 1,
+            'position_score': 0,
             'numeric_value': 1
         },
         {
             'player_id': -1,
-            'position_score': 1,
+            'position_score': 0,
             'numeric_value': 1
         },
         {
             'player_id': -1,
-            'position_score': 1,
+            'position_score': 0,
             'numeric_value': 1
         }
     ],
     'forward playing': [
         {
             'player_id': -1,
-            'position_score': 1,
+            'position_score': 0,
             'numeric_value': 1
         },
         {
             'player_id': -1,
-            'position_score': 1,
+            'position_score': 0,
             'numeric_value': 1
         },
         {
             'player_id': -1,
-            'position_score': 1,
+            'position_score': 0,
             'numeric_value': 1
         },
         {
             'player_id': -1,
-            'position_score': 1,
+            'position_score': 0,
             'numeric_value': 1
         },
         {
             'player_id': -1,
-            'position_score': 1,
+            'position_score': 0,
             'numeric_value': 1
         }
     ]
