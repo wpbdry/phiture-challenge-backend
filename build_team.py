@@ -56,13 +56,14 @@ def build_team(budget):
 
 def add_team_info_to_team(team):
     team_with_info = {
+        'team_is_complete': True,
         'price': int(team['price'])
     }
     for position in config.positions:
         position_players = team[position]
         team_with_info[position] = []
         for i in range(0, len(position_players)):
-            if position_players[i]['player_id'] != -1:  # REMOVE: Only here cause team building isn't working properly
+            if position_players[i]['player_id'] != -1:
                 query = """
                     SELECT {0}
                     FROM {1}
@@ -75,8 +76,7 @@ def add_team_info_to_team(team):
                 team_with_info[position][i]['numeric_value'] = int(position_players[i]['numeric_value'])
                 # Intentionally throw away value_for_money at this point
             else:
-                team_with_info[position].append({'name': 'unavailable dude'})
-
+                team_with_info['team_is_complete'] = False
     return team_with_info
 
 
