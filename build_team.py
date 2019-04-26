@@ -1,3 +1,5 @@
+import copy
+
 import config, db
 
 
@@ -33,7 +35,7 @@ def find_least_valuable_player(position_players):
 
 
 def build_team(budget):
-    team = config.empty_team
+    team = copy.deepcopy(config.empty_team)
     all_players = get_players()
     for new_player in all_players:
         position = new_player['position']
@@ -41,7 +43,7 @@ def build_team(budget):
         current_player_index = find_least_valuable_player(team[position])
         current_player = team[position][current_player_index]
         new_price_of_team = team['price'] - current_player['numeric_value'] + new_player['numeric_value']
-        if new_price_of_team <= budget:  # We can switch them out
+        if new_price_of_team <= budget:  # We can afford to switch them out
             if new_player['position_score'] > current_player['position_score']:  # We want to switch them out
                 team[position][current_player_index]['player_id'] = new_player['row_number']
                 team[position][current_player_index]['position_score'] = new_player['position_score']
