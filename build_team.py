@@ -36,6 +36,7 @@ def find_least_valuable_player(position_players):
 
 def build_team(budget):
     team = copy.deepcopy(config.empty_team)
+    team['budget'] = budget
     all_players = get_players()
     for new_player in all_players:
         position = new_player['position']
@@ -57,7 +58,8 @@ def build_team(budget):
 def add_team_info_to_team(team):
     team_with_info = {
         'team_is_complete': True,
-        'price': int(team['price'])
+        'price': int(team['price']),
+        'budget': int(team['budget'])
     }
     for position in config.positions:
         position_players = team[position]
