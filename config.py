@@ -2,7 +2,7 @@ import secret
 
 # Flask
 flask_host = "0.0.0.0"
-flask_port = 5000
+flask_port = 80
 
 # Database
 db_host = "balarama.db.elephantsql.com"
@@ -10,11 +10,6 @@ db_port = "5432"
 db_name = "stcyqqal"
 db_user = "stcyqqal"
 db_password = secret.elephantsql_dbpassword
-
-db_table_name = "phiture_challenge.players"
-db_my_data_table_name = "phiture_challenge.my_data"
-db_requested_columns = "name, age, nationality, club, photo, overall, value"
-db_requested_columns_for_team = "name, age, nationality, photo, value, height, preferred_foot, jersey_number"
 
 # Team constellation
 positions = ['goalkeeper', 'fullback', 'halfback', 'forward playing']

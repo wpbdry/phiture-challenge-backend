@@ -6,7 +6,6 @@ from flask_cors import CORS
 import config, search_engine, build_team
 
 app = Flask(__name__)
-CORS(app)
 api = flask_restful.Api(app)
 
 search_parser = flask_restful_reqparse.RequestParser()
@@ -48,5 +47,5 @@ if __name__ == '__main__':
     app.run(
         host=config.flask_host,
         port=config.flask_port,
-        debug=True
+        debug=False
     )
