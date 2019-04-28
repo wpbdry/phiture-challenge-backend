@@ -116,15 +116,15 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
         </h3>
         <p>
             A table of 11 players will be displayed,
-            msking up the best possible team you could theoretically buy
+            making up the best possible team you could theoretically buy
             with the amount of money you entered.
-            Attributes displayed are photo, name, position, age, nationality, score,
-            position, value, preferred foot, and height.
+            Attributes displayed are photo, position, name, age, nationality, score,
+            value, preferred foot, and height.
         </p>
         <p>
             Players are rated according to their score for their preferred position.
             A more expensive player is only preferred if it can replace a player
-            with a lower rating in the same position in the team..
+            with a lower rating in the same position in the team.
         </p>
         <p>
             If your budget is too low to buy any complete team, this will be indicated
@@ -140,7 +140,7 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
             This web app consists of a frontend, written in plain HTML/JS/CSS,
             and a backend written in Python.
             The two parts are completely seperate from each other and communicate
-            through POST requests to predefined RESTful API endpoints
+            through POST requests to predefined RESTful API endpoints.
         </p>
         <h3>
             API
@@ -156,8 +156,8 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
             In the backend I am using the web framework, Flask, along with the flask_restful module
             to host the API. Since the web hosting responsibilities of the backend are very limited
             (only providing data), a minimal framework like Flask is suitable. I probably could
-            have used something even simpler than Flask but Flask has a reasonable number of features,
-            should you choose to use them, so it's not a bad option. In the past I have created REST APIs
+            have used something even simpler than Flask, but Flask has a reasonable number of features,
+            should you unexpectedly need something, so it's not a bad option. In the past I have created REST APIs
             with vanilla Flask, but after a quick Google search I found flask_restful, which seemed
             simple to use and suited my needs well.
         </p>
@@ -194,20 +194,21 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
             The team builder algorithm is implemented in two steps.
             I created a Python script that I ran once at the beginning,
             which gets the position for each player and then gets their position score.
-            It also processes the value value of each player from being a string into being just a number.
-            It then stores the new "position score" and the new numeric value in a seperate table 
+            It also converts the value of each player from type string to type integer.
+            It then stores the new "position score" and the new numeric value in a separate table
             (so as not to change the original dataset). Doing this reduces data overhead
             because I later only request the position score for each player, and not the score for every position.
         </p>
         <p>
-            The second step is the alorithm that runs every time the API is called.
+            The second step is the algorithm that runs every time the API is called.
             This script gets all players ordered by value ascending, and then iterates through the list
             checking the score of each player in the list against the score of the existing player in that position.
-            If the new score is higher, and the budget can afford it, the algorithm switches the players out.
+            If the new score is higher, and the new player can be afforded within the budget,
+            the algorithm switches the players out.
         </p>
         <p>
             I decided to do all searches in SQL becuase I believe that databases can process
-            data as fast if not faster than a Python script on any server. Searching in the database
+            data as fast, if not faster, than a Python script on any server. Searching in the database
             also then returns less data which reduces overhead. This is also the safer way, since
             if the dataset were very large, or
             if the server had very little RAM, you also wouldn't be able to store all the data in memory.
@@ -219,7 +220,7 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
         <p>
             I am hosting the backend on Amazon Web Services (AWS), because I recently got some experience using AWS
             and I know how it works.
-            The needs of this project are not that great and are perfectly possible within the free tier on AWS.
+            The needs of this project are not that great and are perfectly possible within the free tier of AWS.
         </p>
         <p>
             I wanted to host the frontend completely seperately on GitHub pages, but I was unable to serve the
@@ -229,7 +230,7 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
             through API calls. 
         </p>
         <p>
-            I am hosting the database on ElephantSQL because it's free and it's reliable and it has limited
+            I am hosting the database on ElephantSQL because it's free and reliable and it has limited
             features but sufficient for this project.
         </p>
         <h2>
@@ -238,33 +239,34 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
         <p>
             If this project were to need to handle large amounts of data with live updates, and we were
             in control of the updates,
-            the first thing I would do is change the structure of the dataset itself.
-            I would seperate first name / initial and last name into seperate colums
+            the first thing I would do is change the structure of the data itself.
+            I would separate first name / initial and last name into seperate colums
             to allow for faster SQL searching.
             I would also change the value column from string type to numeric.
-            The algorighm needs to sort by value, and having numeric values, makes this easier.
+            The algorithm needs to sort by value, and having numeric values, makes this easier.
             I would also include a "position score" column in the data
             which is the players's score for their preferred position.
             This is double storage of data, but it is also necessary for sorting in the team builder algorithm.
-            The last two changes to the data structure, would make my initial "set up"
-            Python script for the team builder algorithm unnecessary, since it would be impossible
+            The last two changes to the data structure, would eliminate the need for my initial "set up"
+            Python script for the team builder algorithm. This is necessary since it would be impossible
             to run this script every time there is a change to the data.
         </p>
         <p>
             In terms of technologies used, I think that Python, PostgreSQL, and Flask are all able to scale very well.
-            I would obviously look at different (probably paid) hosting options, to provide the right speed that we need.
+            I would obviously look at different (probably paid) hosting options, to provide the right speeds that we need,
+            depending on the size of the dataset, and of course a secure connection over HTTPS.
         </p>
         <p>
             In terms of the algorithms I have written
             I would make sure that I never
             make multiple database connections for the same task, since establishing a network connection
             causes a lot of latency.
-            In the team building algorithm there is a lot of itterating through datasets that could become very large.
-            I would research about how effiecient it is to iterate through different types of data in python
+            In the team building algorithm there is a lot of iterating through datasets that could become very large.
+            I would research about how efficient it is to iterate through different types of data in Python
             to speed that up.
-            Currently I am using a lot of dicitonaries with key-value pairs,
-            But it is probably faster to iterate through the database connection cursor object in some cases,
-            and to use number indexed data types like arrays in other cases.
+            Currently I am using a lot of dictionaries with key-value pairs,
+            but it is probably faster in some cases to iterate through the database connection cursor object,
+            and in other cases to use a numbered index data types like an array.
         </p>
     </div>
 
