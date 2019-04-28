@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 import flask_restful
 from flask_restful import reqparse as flask_restful_reqparse
 from flask_cors import CORS
@@ -8,6 +8,13 @@ import config, search_engine, build_team
 app = Flask(__name__)
 CORS(app)
 api = flask_restful.Api(app)
+
+
+@app.route('/')
+def hello_world():
+    error = None
+    return render_template('index.html', error=error)
+
 
 search_parser = flask_restful_reqparse.RequestParser()
 search_parser.add_argument('searchterm')

@@ -1,0 +1,35 @@
+#results-div > table,
+#team-result-div > table {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+#results-div > table > tr > th,
+#results-div > table > tr > td,
+#team-result-div > table > tr > th,
+#team-result-div > table > tr > td {
+    width: 800px;
+    text-align: left;
+    border: 1px solid black;
+    padding-left: 8px;
+}
+
+#results-div > table > tr > th > img,
+#results-div > table > tr > td > img,
+#team-result-div > table > tr > th > img,
+#team-result-div > table > tr > td > img {
+    width: 40px;
+    height: 40px;
+    padding: 0px;
+}
+
+#tab-bar {
+    width: 100%;
+    border-bottom: 1px black solid;
+    padding-bottom: 8px;
+}
+
+.active {
+    color: red;
+    font-weight: 800;
+}

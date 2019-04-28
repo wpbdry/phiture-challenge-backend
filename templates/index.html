@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<!------------------------------------------------------------------------
+_/                _/  _/_/_/    _/_/_/    _/_/_/    _/_/_/    _/      _/  
+_/              _/   _/    _/  _/    _/  _/    _/  _/    _/    _/  _/     
+_/    _/_/    _/    _/_/_/    _/_/_/    _/    _/  _/_/_/        _/      
+_/  _/  _/  _/     _/        _/    _/  _/    _/  _/  _/        _/       
+_/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
+------------------------------------------------------------------------->
+
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Phiture Coding Challenge - William Dry</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script>
+        const profilePhotoUrl = "{{ url_for('static', filename='img/profile-icon.png') }}";
+    </script>
+</head>
+<body>
+    <h1>
+        Phiture Coding Challenge
+    </h1>
+    <h2>
+        William Dry
+    </h2>
+    <div id="tab-bar">
+        <a href="javascript:switchTab('tab1', 'search-app');" id="tab1" class="tab-menu active">
+            Search Players
+        </a>
+        |
+        <a href="javascript:switchTab('tab2', 'team-app');" id="tab2" class="tab-menu">
+            Team Builder
+        </a>
+        |
+        <a href="javascript:switchTab('tab3', 'documentation');" id="tab3" class="tab-menu">
+            Documentation
+        </a>
+    </div>
+    <div id="search-app" class="tab-content">
+        <p>
+            Search for football players by name, club, or nationality:
+        </p>
+        <form id="search-form">
+            <input id="search-input">
+            <button type="submit">
+                Search
+            </button>
+        </form>
+        <div id="results-div"></div>
+    </div>
+    <div id="team-app" class="tab-content" style="display: none">
+        <p>
+            How much are you willing to invest in your football team?
+        </p>
+        <p>
+            We will calculate the best possible FIFA team you can buy with your budget.
+        </p>
+        <form id="builder-form">
+            €
+            <input id="builder-input">
+            ,00
+            <button type="submit">
+                Calculate!
+            </button>
+        </form>
+        <div id="team-result-div"></div>
+    </div>
+    <div id="documentation" class="tab-content" style="display: none">
+        <h1>
+            Documentation
+        </h1>
+        <h2>
+            Usage
+        </h2>
+        <h3>
+            Search input
+        </h3>
+        <p>
+            Input any UTF-8 search term.
+        </p>
+        <h3>
+            Search output
+        </h3>
+        <p>
+            All searches are performed on the attributes name, club, and nationality of all players.
+            In every case a table of "exact matches" is displayed
+            and in some cases an additional table of "close matches" is displayed.
+            Attributes displayed are photo, name, age, nationality, club, overall score, and value.
+        </p>
+        <p>
+            If you entered <b>one</b> word as a search term, "exact matches" includes
+            all players where your search term was found as a whole word.
+            "Close matches" includes any additional players where your search term was found as part of a word.
+        </p>
+        <p>
+            If you entered <b>two</b> words as a search term, "exact matches" includes
+            all players where both words were found in the same player.
+            "Close matches" includes any additional players where only one
+            of the two words was found. If you entered only partial words
+            you will not receive any results.
+        </p>
+        <p>
+            If you entered <b>three or more</b> words as a search term,
+            "exact matches" includes all results where any of the three words was found.
+            No "close matches" are shown.
+        </p>
+        <h3>
+            Team builder input
+        </h3>
+        <p>
+            Input any value in euros as a whole number.
+        </p>
+        <h3>
+            Team builder output
+        </h3>
+        <p>
+            A table of 11 players will be displayed,
+            msking up the best possible team you could theoretically buy
+            with the amount of money you entered.
+            Attributes displayed are photo, name, position, age, nationality, score,
+            position, value, preferred foot, and height.
+        </p>
+        <p>
+            Players are rated according to their score for their preferred position.
+            A more expensive player is only preferred if it can replace a player
+            in the team in the same position with a lower rating.
+        </p>
+        <p>
+            If your budget is too low to buy any complete team, this will be indicated
+            and no team will be displayed.
+        </p>
+        <h2>
+            Implementation
+        </h2>
+        <h3>
+            General
+        </h3>
+        <p>
+            This web app consists of a frontend, written in plain HTML/JS/CSS,
+            and a backend written in Python.
+            The two parts are completely seperate from each other and communicate
+            through POST requests to predefined RESTful API endpoints
+        </p>
+        <h3>
+            API
+        </h3>
+        <p>
+            I decided to build a RESTful API, rather than using something more powerful like GraphQL,
+            because the API needs for this project are extremely simple.
+            There are only two API requests that are ever made (search, and build team)
+            and the parameters passed and returned are always the same,
+            making it pointless to use a query type API framework.
+        </p>
+        <p>
+            In the backend I am using the web framework, Flask, along with the flask_restful module
+            to host the API. Since the web hosting responsibilities of the backend are very limited
+            (no web pages, only API), a minimal framework like Flask is suitable. I probably could
+            have used something even simpler than Flask but Flask has a reasonable number of features,
+            should you choose to use them, so it's not a bad option. In the past I have created REST APIs
+            with only Flask, but after a quick Google search I found flask_restful, which seemed
+            to make things simpler and suit my needs well.
+        </p>
+        <h3>
+            Data management
+        </h3>
+        <p>
+            I am using a PostgreSQL database to store and query the dataset. I decided to use a relational database
+            because I decided from the beginning that I would perform all searches directly in SQL.
+            To be honest, I also have no experience with non relational databases and I don't know how
+            easy or fast it is to search through them. I chose PostgreSQL because
+            it is powerful and an open source project, which I support.
+        </p>
+        <p>
+            I interact with the database
+            from Python using the psycopg2 module. This is minimalistic and gets the job done.
+            However, in retrospect, I think it may have made my life easier if I had used an
+            object-relational mapper like SQLAlchemy. I did not forsee the amount of data processing
+            that I would be doing in the backend.
+        </p>
+        <h3>
+            Implementation of algorithms
+        </h3>
+        <p>
+            The search algorithm is relatively limited. Only supports up to two words.
+            And it's stupid because it makes multiple SQL queries, which ends up being 
+            slower because of multiple connections to db.
+        </p>
+        <p>
+            The team builder algorithm is implemented in two steps.
+            There is a Python script that I ran once at the beginning,
+            which gets the position for each player and then gets their position score.
+            It also processes the value from being a string into being just a number.
+            It then stores the "position score" and the new value in a seperate table 
+            (so as not to change the original dataset). Doing this reduces data overhead
+            because I only request the position score, and not the score for every position.
+        </p>
+        <p>
+            The second step is the alorithm that runs every time the API is called.
+            This then gets all players ordered by value ascending, and then iterates down the list
+            checking the score agains the score of the existing player in that position,
+            and if the new score is higher, and we can afford it, switches the players out.
+        </p>
+        <p>
+            I decided to do all searches in sql becuase i believe that databases can process
+            stuff like that just as fast if not faster than python. and searching in the db
+            then returns less data which reduces overhead. Also if the data were large, or
+            if the server had little ram, you wouldn't be able to store all the data in memory.
+            The only thing that I've done multiple times which is stupid, is making multiple
+            requests to the database. Cause that majorly slows things down.
+        </p>
+        <h3>
+            Hosting
+        </h3>
+        <p>
+            hosting the frontend on github pages cause it's easy and integrated with github
+        </p>
+        <p>
+            hosting the backend on aws, cause I recently got some experience with that and I know how it works
+            and it's possible within the free tier.
+        </p>
+        <p>
+            Hosting the database on ElephantSQL because it's free, has enough features, and seemed good on google.
+        </p>
+        <h2>
+            Scalability
+        </h2>
+        <p>
+            The first thing I would try to do is change the structure of the dataset itself.
+            Please seperate first name and last name.
+            Please list value as number.
+            Please include position score. It's double data storing but reduces overhead (unless you can do this in sql)
+            Cause with live updates the setup thing won't work
+        </p>
+        <p>
+            I think python is good. I think SQL is good. I think Flask is good.
+            I would change my algorithms so that they never
+            make two sql connections for the same task.
+            And I might use an ORM to make life easier. Definitely use classes for teams
+        </p>
+        <p>
+            I would look into more efficient search algorithms.
+            I would research about how efficient it is to iterate through different data types in python (for the team),
+            It probably is faster to use the cursor object, and not use key value pairs for anything.
+        </p>
+        <p>
+            I have no idea about hosting. I'm pretty sure that the free stuff won't continue to work.
+            I guess there are multiple hosting services, and you pay for what you get.
+        </p>
+        <p>
+            Flask should also be made secure in the hosting. Apparently I'm using a development version of flask.
+        </p>
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/config.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/search.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/builder.js') }}"></script>
+</body>
+</html>
