@@ -55,5 +55,5 @@ if __name__ == '__main__':
     app.run(
         host=config.flask_host,
         port=config.flask_port,
-        debug=True
+        debug=False
     )

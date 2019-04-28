@@ -2,7 +2,7 @@ import secret
 
 # Flask
 flask_host = "0.0.0.0"
-flask_port = 5000
+flask_port = 80
 
 # Database
 db_host = "balarama.db.elephantsql.com"
