@@ -11,8 +11,8 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Phiture Coding Challenge - William Dry</title>
-    <link rel="icon" href="img/favicon.png">
-    <link rel="stylesheet" href="main.css">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
     <h1>
@@ -265,9 +265,9 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
         </p>
     </div>
 
-    <script type="text/javascript" src="config.js"></script>
-    <script type="text/javascript" src="main.js"></script>
-    <script type="text/javascript" src="search.js"></script>
-    <script type="text/javascript" src="builder.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/config.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/search.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/builder.js') }}"></script>
 </body>
 </html>
