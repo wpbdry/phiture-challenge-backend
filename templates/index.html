@@ -11,11 +11,8 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Phiture Coding Challenge - William Dry</title>
-    <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <script>
-        const profilePhotoUrl = "{{ url_for('static', filename='img/profile-icon.png') }}";
-    </script>
+    <link rel="icon" href="img/favicon.png">
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
     <h1>
@@ -124,7 +121,7 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
         <p>
             Players are rated according to their score for their preferred position.
             A more expensive player is only preferred if it can replace a player
-            in the team in the same position with a lower rating.
+            with a lower rating in the same position in the team..
         </p>
         <p>
             If your budget is too low to buy any complete team, this will be indicated
@@ -147,7 +144,7 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
         </h3>
         <p>
             I decided to build a RESTful API, rather than using something more powerful like GraphQL,
-            because the API needs for this project are extremely simple.
+            because the API needs of this project are extremely simple.
             There are only two API requests that are ever made (search, and build team)
             and the parameters passed and returned are always the same,
             making it pointless to use a query type API framework.
@@ -155,11 +152,11 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
         <p>
             In the backend I am using the web framework, Flask, along with the flask_restful module
             to host the API. Since the web hosting responsibilities of the backend are very limited
-            (no web pages, only API), a minimal framework like Flask is suitable. I probably could
+            (only providing data), a minimal framework like Flask is suitable. I probably could
             have used something even simpler than Flask but Flask has a reasonable number of features,
             should you choose to use them, so it's not a bad option. In the past I have created REST APIs
-            with only Flask, but after a quick Google search I found flask_restful, which seemed
-            to make things simpler and suit my needs well.
+            with vanilla Flask, but after a quick Google search I found flask_restful, which seemed
+            simple to use and suited my needs well.
         </p>
         <h3>
             Data management
@@ -182,79 +179,95 @@ _/_/    _/_/      _/        _/_/_/    _/_/_/    _/    _/      _/  made it!
             Implementation of algorithms
         </h3>
         <p>
-            The search algorithm is relatively limited. Only supports up to two words.
-            And it's stupid because it makes multiple SQL queries, which ends up being 
-            slower because of multiple connections to db.
+            The search algorithm is relatively limited, but more advanced than
+            only searching for exact matches. Currently it only supports up to two words
+            because I couldn't find a way to automatically generate SQL queries
+            depending on the number of words, so I only manually created three options.
+            Currently in every search, multiple connections are made to the database,
+            to retrieve different sets of results. I would try to get rid of this in the future
+            because it slows things down.
         </p>
         <p>
             The team builder algorithm is implemented in two steps.
-            There is a Python script that I ran once at the beginning,
+            I created a Python script that I ran once at the beginning,
             which gets the position for each player and then gets their position score.
-            It also processes the value from being a string into being just a number.
-            It then stores the "position score" and the new value in a seperate table 
+            It also processes the value value of each player from being a string into being just a number.
+            It then stores the new "position score" and the new numeric value in a seperate table 
             (so as not to change the original dataset). Doing this reduces data overhead
-            because I only request the position score, and not the score for every position.
+            because I later only request the position score for each player, and not the score for every position.
         </p>
         <p>
             The second step is the alorithm that runs every time the API is called.
-            This then gets all players ordered by value ascending, and then iterates down the list
-            checking the score agains the score of the existing player in that position,
-            and if the new score is higher, and we can afford it, switches the players out.
+            This script gets all players ordered by value ascending, and then iterates through the list
+            checking the score of each player in the list against the score of the existing player in that position.
+            If the new score is higher, and the budget can afford it, the algorithm switches the players out.
         </p>
         <p>
-            I decided to do all searches in sql becuase i believe that databases can process
-            stuff like that just as fast if not faster than python. and searching in the db
-            then returns less data which reduces overhead. Also if the data were large, or
-            if the server had little ram, you wouldn't be able to store all the data in memory.
-            The only thing that I've done multiple times which is stupid, is making multiple
-            requests to the database. Cause that majorly slows things down.
+            I decided to do all searches in SQL becuase I believe that databases can process
+            data as fast if not faster than a Python script on any server. Searching in the database
+            also then returns less data which reduces overhead. This is also the safer way, since
+            if the dataset were very large, or
+            if the server had very little RAM, you also wouldn't be able to store all the data in memory.
+            However, in this algorithm I also make multiple connections to the database, which should be fixed.
         </p>
         <h3>
             Hosting
         </h3>
         <p>
-            hosting the frontend on github pages cause it's easy and integrated with github
+            I am hosting the backend on Amazon Web Services (AWS), because I recently got some experience using AWS
+            and I know how it works.
+            The needs of this project are not that great and are perfectly possible within the free tier on AWS.
         </p>
         <p>
-            hosting the backend on aws, cause I recently got some experience with that and I know how it works
-            and it's possible within the free tier.
+            I wanted to host the frontend completely seperately on GitHub pages, but I was unable to serve the
+            backend over HTTPS and it's not possible to serve from GitHub pages over HTTP. Websites served over HTTPS
+            are not able to make API calls over HTTP. So now I am serving the frontend from Flask, as part of the
+            same app hosted on AWS. However, none of the data is passed using Flask; this is all still done 
+            through API calls. 
         </p>
         <p>
-            Hosting the database on ElephantSQL because it's free, has enough features, and seemed good on google.
+            I am hosting the database on ElephantSQL because it's free and it's reliable and it has limited
+            features but sufficient for this project.
         </p>
         <h2>
             Scalability
         </h2>
         <p>
-            The first thing I would try to do is change the structure of the dataset itself.
-            Please seperate first name and last name.
-            Please list value as number.
-            Please include position score. It's double data storing but reduces overhead (unless you can do this in sql)
-            Cause with live updates the setup thing won't work
+            If this project were to need to handle large amounts of data with live updates, and we were
+            in control of the updates,
+            the first thing I would do is change the structure of the dataset itself.
+            I would seperate first name / initial and last name into seperate colums
+            to allow for faster SQL searching.
+            I would also change the value column from string type to numeric.
+            The algorighm needs to sort by value, and having numeric values, makes this easier.
+            I would also include a "position score" column in the data
+            which is the players's score for their preferred position.
+            This is double storage of data, but it is also necessary for sorting in the team builder algorithm.
+            The last two changes to the data structure, would make my initial "set up"
+            Python script for the team builder algorithm unnecessary, since it would be impossible
+            to run this script every time there is a change to the data.
         </p>
         <p>
-            I think python is good. I think SQL is good. I think Flask is good.
-            I would change my algorithms so that they never
-            make two sql connections for the same task.
-            And I might use an ORM to make life easier. Definitely use classes for teams
+            In terms of technologies used, I think that Python, PostgreSQL, and Flask are all able to scale very well.
+            I would obviously look at different (probably paid) hosting options, to provide the right speed that we need.
         </p>
         <p>
-            I would look into more efficient search algorithms.
-            I would research about how efficient it is to iterate through different data types in python (for the team),
-            It probably is faster to use the cursor object, and not use key value pairs for anything.
-        </p>
-        <p>
-            I have no idea about hosting. I'm pretty sure that the free stuff won't continue to work.
-            I guess there are multiple hosting services, and you pay for what you get.
-        </p>
-        <p>
-            Flask should also be made secure in the hosting. Apparently I'm using a development version of flask.
+            In terms of the algorithms I have written
+            I would make sure that I never
+            make multiple database connections for the same task, since establishing a network connection
+            causes a lot of latency.
+            In the team building algorithm there is a lot of itterating through datasets that could become very large.
+            I would research about how effiecient it is to iterate through different types of data in python
+            to speed that up.
+            Currently I am using a lot of dicitonaries with key-value pairs,
+            But it is probably faster to iterate through the database connection cursor object in some cases,
+            and to use number indexed data types like arrays in other cases.
         </p>
     </div>
 
-    <script type="text/javascript" src="{{ url_for('static', filename='js/config.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/search.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/builder.js') }}"></script>
+    <script type="text/javascript" src="config.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="search.js"></script>
+    <script type="text/javascript" src="builder.js"></script>
 </body>
 </html>
