@@ -1,3 +1,6 @@
+This version of this project is currently online at
+http://ec2-3-16-29-150.us-east-2.compute.amazonaws.com
+
 # The challenge
 
 1. We want you to create a search engine that can do the following:
