@@ -1,7 +1,9 @@
+# Phiture coding challenge
+
 This version of this project is currently online at
 http://ec2-3-16-29-150.us-east-2.compute.amazonaws.com
 
-# The challenge
+## The challenge
 
 1. We want you to create a search engine that can do the following:
 * Search within the database with a text query
@@ -25,7 +27,7 @@ budget . Best player is defined from their overall score. (You
 can also decide to use other attributes to define the best player if
 you wish).
 
-# Installation
+## Installation
 Python 3.7.2
 
 1. Clone repository
@@ -52,7 +54,7 @@ Edit the following line in `config.py`
 flask_port = 80
 ```
 
-# Run the application
+## Run the application
 ```bash
 $ python3 app.py
 ```
